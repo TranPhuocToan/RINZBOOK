@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+</style>
+</head>
+
+<body>
+	<!-- TOP Nav Bar -->
+	<div class="iq-top-navbar">
+		<img src="../../images/Header_1263x60.png" style="width: 100%">
+		<div class="iq-navbar-custom" style="background: #659DBD; height: 100px">
+			<nav class="navbar navbar-expand-lg navbar-light" style="padding: 0px 20px">
+				<div class="navbar-breadcrumb text-container" style="padding: 0px">
+					<a href="/" >
+						<img style="max-width: 100px;border-radius: 50px;" src="../../images/logostore1.jpg" alt="" >
+					</a>
+				</div>
+				<div class="iq-search-bar">
+					<form  ng-submit="submitForm()" class="searchbox">
+						<input style="border-radius: 49px; width: 500px" ng-model="searchKeyword" type="text"
+							class="text search-input" placeholder="Tìm kiếm truyện tranh..." >
+						<a class="search-link"><i class="ri-search-line"></i></a>
+					</form>
+				</div>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ml-auto navbar-list">
+						<li class="nav-item nav-icon search-content"><a href="#"
+							class="search-toggle iq-waves-effect text-gray rounded"> <i
+								class="ri-search-line"></i>
+						</a>
+							<form action="#" class="search-box p-0">
+								<input type="text" class="text search-input"
+									placeholder="Type here to search..."> <a
+									class="search-link" href="#"><i class="ri-search-line"></i></a>
+							</form></li>
+						<li class="nav-item nav-icon"><a href="/favorite"
+							class="search-toggle iq-waves-effect text-gray rounded"> <i
+								class="ri-heart-line" style="color: white;"></i>
+						</a></li>
+						<li class="nav-item nav-icon"><a href="#"
+							class="search-toggle iq-waves-effect text-gray rounded"> <i
+								class="ri-notification-2-line" style="color: white"></i> <span
+								class="bg-primary dots"></span>
+						</a>
+							<div class="iq-sub-dropdown">
+								<div class="iq-card shadow-none m-0">
+									<div class="iq-card-body p-0">
+										<div class="p-3" style="background-color: #659DBD">
+											<h5 class="mb-0 text-white">
+												Thông Báo<small class="badge  badge-light float-right pt-1">{{getOrderItem()}}</small>
+											</h5>
+										</div>
+										<a ng-repeat="item in items" ng-if="item.status.id == 3 "
+											href="#" class="iq-sub-card">
+											<div class="media align-items-center">
+												<div class="">
+													<i class="fas fa-check" style="color: #53dc09;"></i>
+												</div>
+												<div class="media-body ml-3">
+													<h6 class="mb-0 ">Đơn hàng #{{item.id}}
+														{{item.status.name}}</h6>
+													<p class="mb-0">{{item.billtotal | number:0}} đ</p>
+												</div>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div></li>
+						<li class="nav-item nav-icon dropdown"><a href="#"
+							class="search-toggle iq-waves-effect text-gray rounded"> <i
+								class="ri-shopping-cart-2-line" style="color: white"></i> <th:block
+									th:if="${#request.remoteUser}">
+									<th:block th:if="${sum} != null">
+										<span class="badge badge-danger count-cart rounded-circle">{{
+											getTotalItem() }}</span>
+									</th:block>
+									<th:block th:if="${sum} == null">
+										<span class="badge badge-danger count-cart rounded-circle">{{
+											getTotalItem() }}</span>
+									</th:block>
+								</th:block>
+						</a>
+							<div class="iq-sub-dropdown">
+								<div class="iq-card shadow-none m-0">
+									<div class="iq-card-body p-0 toggle-cart-info">
+										<div class="p-3" style="background-color:  #659DBD">
+											<h5 class="mb-0 text-white">
+												Giỏ Hàng<small class="badge  badge-light float-right pt-1">{{
+													getTotalItem()}}</small>
+											</h5>
+										</div>
+										<a href="#" class="iq-sub-card" ng-repeat="cd in cartdetails">
+											<div class="media align-items-center">
+												<div class="">
+													<img class="rounded"
+														th:src="@{|/images/book/{{cd.book.image}}|}" alt="">
+												</div>
+												<div class="media-body ml-3">
+													<h6 class="mb-0 ">{{cd.book.name}}</h6>
+													<p class="mb-0">{{cd.price |number:0}} VNĐ</p>
+												</div>
+												<div class="float-right font-size-24 text-danger">
+													<i class="ri-close-fill" ng-click="showConfirm(cd)"></i>
+												</div>
+											</div>
+										</a>
+										<div class="d-flex align-items-center text-center p-3">
+											<a class="btn mr-2 iq-sign-btn" href="/checkout"
+												role="button" style="background-color:  #659DBD">Giỏ Hàng</a>
+										</div>
+									</div>
+								</div>
+							</div></li>
+						<th:block th:if="${#request.remoteUser}">
+							<li class="line-height pt-3"><a href="#"
+								class="search-toggle iq-waves-effect d-flex align-items-center">
+									<img src="../../images/user/{{user.photo}}"
+									class="img-fluid rounded-circle mr-3" alt="user">
+									<div class="caption">
+										<h6 class="mb-1 line-height"
+											th:text="${#strings.length(#request.remoteUser) > 5 ? #strings.substring(#request.remoteUser, 0, 5) + '...' : #request.remoteUser}"
+											th:value="${#request.remoteUser}"></h6>
+										<p class="mb-0 text-primary" id="username"
+											style="display: none">[[${#request.remoteUser}]]</p>
+									</div>
+							</a>
+								<div class="iq-sub-dropdown iq-user-dropdown">
+									<div class="iq-card shadow-none m-0">
+										<div class="iq-card-body p-0 ">
+											<div class="p-3" style="background:  #659DBD">
+												<h5 class="mb-0 text-white line-height">Xin Chào
+													{{user.fullname}}</h5>
+											</div>
+											<a href="/edit" class="iq-sub-card iq-bg-primary-hover">
+												<div class="media align-items-center">
+													<div class="rounded iq-card-icon iq-bg-primary">
+														<i class="ri-file-user-line"></i>
+													</div>
+													<div class="media-body ml-3">
+														<h6 class="mb-0 ">Tài khoản của tôi</h6>
+													</div>
+												</div>
+											</a> <a href="/order" class="iq-sub-card iq-bg-primary-hover">
+												<div class="media align-items-center">
+													<div class="rounded iq-card-icon iq-bg-primary">
+														<i class="ri-account-box-line"></i>
+													</div>
+													<div class="media-body ml-3">
+														<h6 class="mb-0 ">Đơn hàng của tôi</h6>
+													</div>
+												</div>
+											</a> <a href="/favorite" class="iq-sub-card iq-bg-primary-hover">
+												<div class="media align-items-center">
+													<div class="rounded iq-card-icon iq-bg-primary">
+														<i class="ri-heart-line"></i>
+													</div>
+													<div class="media-body ml-3">
+														<h6 class="mb-0">Yêu Thích</h6>
+													</div>
+												</div>
+											</a>
+											<div class="d-inline-block w-100 text-center p-3">
+												<a class="iq-sign-btn warning text-black"
+													th:href="@{/security/logoff}">Đăng xuất<i
+													class="ri-login-box-line ml-2"></i></a>
+											</div>
+
+										</div>
+									</div>
+								</div></li>
+						</th:block>
+						<th:block th:unless="${#request.remoteUser}">
+							<li style="margin-top: 30px; color: black;"><a
+								class="dropdown-item" th:href="@{/security/login/form}" style="padding: 5px;border-radius: 5px"> <b>Đăng
+										nhập</b>
+							</a></li>
+						</th:block>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+
+	<!-- TOP Nav Bar END -->
+
+
+</body>
+</html>
